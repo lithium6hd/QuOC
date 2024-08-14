@@ -1,0 +1,35 @@
+{
+  "optimization_client_name": "Parameter Search",
+  "create_logfile": true,
+  "algorithm_settings": {
+    "algorithm_name": "DirectSearch",
+    "optimization_direction": "maximization",
+    "dsm_settings": {
+        "general_settings": {
+            "dsm_algorithm_name": "NelderMead"
+        },
+        "stopping_criteria": {
+            "xatol": 1e-14,
+            "fatol": 1e-4
+        }
+    }
+  },
+  "pulses": [],
+  "times": [],
+  "parameters": [
+    {
+        "parameter_name": "CoolerVCO",
+        "lower_limit": 1,
+        "upper_limit": 6,
+        "initial_value": 1.7,
+        "amplitude_variation": 1
+    },
+    {
+        "parameter_name": "RepumpVCO",
+        "lower_limit": 1,
+        "upper_limit": 10,
+        "initial_value": 7.1,
+        "amplitude_variation": 1
+    }
+]
+}
