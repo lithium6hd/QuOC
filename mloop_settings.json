@@ -1,0 +1,10 @@
+{
+  "max_num_runs": 10000,
+  "cost_has_noise": true,
+  "parameters": {
+    "name": ["a", "b", "c"],
+    "min_boundary": [0, 0, 0],
+    "max_boundary": [10, 10, 10],
+    "first_params": [1, 2, 3]
+  }
+}

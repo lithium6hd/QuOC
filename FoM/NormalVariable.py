@@ -48,6 +48,9 @@ class NormalVariable(FoM):
     def get(self) -> float:
         return self.estimate
 
+    def get_errror(self) -> float:
+        return self.est_err
+
     def update_record(self) -> float:
         if self.estimate > self.record:
             self.record = self.estimate  # update record
