@@ -38,7 +38,8 @@ class MloopInterface(mli.Interface):
 
     def __init__(self, fom: FoM):
         super(MloopInterface, self).__init__()
-        self.be = MloopBackendServer(self, fom)
+        # self.fom = fom
+        self.be = MloopBackendServer(fom)
 
     def get_next_cost_dict(self, params_dict):
         parameters = params_dict['params']
@@ -123,7 +124,7 @@ class MloopBackendServer(BackendServer):
             # reset for next FoM measurement
             self.fom.reset()
         for i, p in enumerate(self.parameters):
-            name = self.opt_dict["parameters"][i]["parameter_name"]
+            name = self.opt_dict["parameters"]["name"][i]  #["parameter_name"]
             payload["Optimized Variables"].append({"n": name, "v": p})
             pass
         for i in range(min(len(self.pulses), 3)):
