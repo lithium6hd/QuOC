@@ -129,3 +129,5 @@ if __name__ == "__main__":
     optimizer = interface
     interface.be.set_optimizer(optimizer, opt_dict)
     interface.be.listen()
+
+    mlv.show_all_default_visualizations(interface.be.optimizer)
