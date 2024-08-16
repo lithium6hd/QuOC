@@ -36,19 +36,17 @@ def execute_optimizer(optimizer):
 
 class MloopInterface(mli.Interface):
 
-    def __init__(self, fom: FoM):
+    def __init__(self, fom: FoM, minimize_fom=True):
         super(MloopInterface, self).__init__()
-        # self.fom = fom
         self.be = MloopBackendServer(fom)
+        self.minimize_fom = minimize_fom
 
     def get_next_cost_dict(self, params_dict):
         parameters = params_dict['params']
 
         if not self.be.synced:  # does this thread hold the lock already?
             self.be.sync_lock.acquire()  # it doesn't -> wait for exp cycles to complete
-        # self.pulses = pulses
         self.be.parameters = parameters
-        # self.timings = timegrids
         self.be.sync_lock.release()
         # wait for exp cycle to start
         while not self.be.sync_lock.locked():
@@ -58,7 +56,12 @@ class MloopInterface(mli.Interface):
         self.be.sync_lock.acquire()
         self.be.synced = True
 
-        return {'cost': self.be.fom.get(), 'uncer': self.be.fom.get_errror(), 'bad': False}
+        if self.minimize_fom:
+            cost_function = self.be.fom.get()
+        else:
+            cost_function = -self.be.fom.get()
+
+        return {'cost': cost_function, 'uncer': self.be.fom.get_errror(), 'bad': False}
 
 
 class MloopBackendServer(BackendServer):
@@ -74,41 +77,10 @@ class MloopBackendServer(BackendServer):
         self.pulse_offset = pulse_offset
         self.optimizer = None
 
-    # def get_next_cost_dict(self, params_dict):
-    #     parameters = params_dict['params']
-    #
-    #     if not self.synced:  # does this thread hold the lock already?
-    #         self.sync_lock.acquire()  # it doesn't -> wait for exp cycles to complete
-    #     # self.pulses = pulses
-    #     self.parameters = parameters
-    #     # self.timings = timegrids
-    #     self.sync_lock.release()
-    #     # wait for exp cycle to start
-    #     while not self.sync_lock.locked():
-    #         pass
-    #
-    #     # get lock and compute new pulses
-    #     self.sync_lock.acquire()
-    #     self.synced = True
-    #
-    #     return {'cost': self.fom.get(), 'uncer': self.fom.get_errror(), 'bad': False}
-
     def set_optimizer(self, interface, optimizer_dict: dict, start_thread=True):
-        max_run_number = optimizer_dict["max_num_runs"]
-        # target_cost = optimizer_dict["target_cost"]
         num_params = np.size(optimizer_dict["parameters"]["name"])
-        min_boundary = optimizer_dict["parameters"]["min_boundary"]
-        max_boundary = optimizer_dict["parameters"]["max_boundary"]
-        first_params = optimizer_dict["parameters"]["first_params"]
-        cost_has_noise = optimizer_dict["cost_has_noise"]
-        self.optimizer = mlc.create_controller(interface,
-                                               max_run_number=max_run_number,
-                                               # target_cost=target_cost,
-                                               num_params=num_params,
-                                               min_boundary=min_boundary,
-                                               max_boundary=max_boundary,
-                                               first_params=first_params,
-                                               cost_has_noise=cost_has_noise)
+        self.optimizer = mlc.create_controller(interface, num_params=num_params, **optimizer_dict)
+
         self.opt_dict = optimizer_dict
         if start_thread:
             self.start_optimizer()
@@ -152,10 +124,8 @@ if __name__ == "__main__":
     logger.setup_applevel_logger()
     #fom = Fidelity(2)
     fom = NormalVariable()
-    interface = MloopInterface(fom)
-    # be = MloopOptimizer(fom, pulse_offset=4.65)
+    interface = MloopInterface(fom, minimize_fom=False)
     opt_dict = readjson("mloop_settings.json")
-    #opt_dict = readjson("dcrab_setting.json")
     optimizer = interface
     interface.be.set_optimizer(optimizer, opt_dict)
     interface.be.listen()

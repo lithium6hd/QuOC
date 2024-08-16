@@ -28,6 +28,8 @@ class NormalVariable(FoM):
     def update(self, target_value: float) -> bool:
         self.samples.append(target_value)
         self.estimate = float(np.mean(self.samples))
+        if self.estimate == 0:
+            self.estimate = 1e-14  # To avoid division by 0
         if len(self.samples) > 1:
             s = stats.sem(self.samples, ddof=1)
             c = stats.t(len(self.samples) - 1).ppf(1 / 2 + self.conf / 2)

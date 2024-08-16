@@ -1,4 +1,5 @@
 {
+  "controller_type": "gaussian_process",
   "max_num_runs": 10000,
   "cost_has_noise": true,
   "parameters": {
@@ -6,5 +7,7 @@
     "min_boundary": [1, 6, 0.1, 0.1, 0.5],
     "max_boundary": [5.1, 7.9, 0.5, 0.5, 4],
     "first_params": [1.9, 7.1, 0.4, 0.4, 1.6]
-  }
+  },
+  "training_type": "random",
+  
 }
