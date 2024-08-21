@@ -44,9 +44,11 @@ class MloopInterface(mli.Interface):
     def get_next_cost_dict(self, params_dict):
         parameters = params_dict['params']
 
+
         if not self.be.synced:  # does this thread hold the lock already?
             self.be.sync_lock.acquire()  # it doesn't -> wait for exp cycles to complete
         self.be.parameters = parameters
+
         self.be.sync_lock.release()
         # wait for exp cycle to start
         while not self.be.sync_lock.locked():
@@ -79,7 +81,10 @@ class MloopBackendServer(BackendServer):
 
     def set_optimizer(self, interface, optimizer_dict: dict, start_thread=True):
         num_params = np.size(optimizer_dict["parameters"]["name"])
-        self.optimizer = mlc.create_controller(interface, num_params=num_params, **optimizer_dict)
+        min_boundary = optimizer_dict["parameters"]["min_boundary"]
+        max_boundary = optimizer_dict["parameters"]["max_boundary"]
+        first_params = optimizer_dict["parameters"]["first_params"]
+        self.optimizer = mlc.create_controller(interface, num_params=num_params, min_boundary=min_boundary, max_boundary=max_boundary, first_params=first_params, **optimizer_dict)
 
         self.opt_dict = optimizer_dict
         if start_thread:
@@ -121,11 +126,11 @@ from utils import logger
 from FoM.NormalVariable import NormalVariable
 
 if __name__ == "__main__":
-    logger.setup_applevel_logger()
+    # logger.setup_applevel_logger()
     #fom = Fidelity(2)
     fom = NormalVariable()
     interface = MloopInterface(fom, minimize_fom=False)
-    opt_dict = readjson("mloop_settings.json")
+    opt_dict = readjson("mloop_compression.json")
     optimizer = interface
     interface.be.set_optimizer(optimizer, opt_dict)
     interface.be.listen()
