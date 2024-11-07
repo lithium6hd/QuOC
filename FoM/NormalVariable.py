@@ -27,26 +27,31 @@ class NormalVariable(FoM):
 
     def update(self, target_value: float) -> bool:
         self.samples.append(target_value)
-        self.estimate = float(np.mean(self.samples))
-        if len(self.samples) > 1:
-            s = stats.sem(self.samples, ddof=1)
-            c = stats.t(len(self.samples) - 1).ppf(1 / 2 + self.conf / 2)
-            print(c)
+        self.estimate = float(np.mean(self.samples[1:]))
+        if self.estimate == 0:
+            self.estimate = 1e-14  # To avoid division by 0
+        if len(self.samples[1:]) > 1:
+            s = stats.sem(self.samples[1:], ddof=1)
+            c = stats.t(len(self.samples[1:]) - 1).ppf(1 / 2 + self.conf / 2)
+            # print(c)
             err = c * s
         else:
             err = np.nan
         self.est_err = err
-        log.info("%i (%.1e) - variable %.2e +/- %.2e (%.1f%%)" % (len(self.samples) - 1, target_value, self.estimate,
+        log.info("%i (%.1e) - variable %.2e +/- %.2e (%.1f%%)" % (len(self.samples[1:]) - 1, target_value, self.estimate,
                                                                   err, abs(err / self.estimate) * 100))
         if abs(err / self.estimate) <= self.acc:  # accurate enough -> stop
             return True
-        if self.estimate + err < self.record:  # this is gonna be worse -> stop
+        if self.estimate + err < self.record or len(self.samples[1:]) > 50:  # this is gonna be worse -> stop
             log.info("----> stop early")
             return True
         return False
 
     def get(self) -> float:
         return self.estimate
+
+    def get_errror(self) -> float:
+        return self.est_err
 
     def update_record(self) -> float:
         if self.estimate > self.record:

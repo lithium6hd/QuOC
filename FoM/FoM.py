@@ -29,6 +29,14 @@ class FoM:
         """
 
     @abstractmethod
+    def get_errror(self) -> float:
+        """
+        Returns
+        -------
+        Error of FoM
+        """
+
+    @abstractmethod
     def update_record(self) -> float:
         """
         Checks if new record.
