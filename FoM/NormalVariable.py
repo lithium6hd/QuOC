@@ -42,7 +42,7 @@ class NormalVariable(FoM):
                                                                   err, abs(err / self.estimate) * 100))
         if abs(err / self.estimate) <= self.acc:  # accurate enough -> stop
             return True
-        if self.estimate + err < self.record or len(self.samples[1:]) > 50:  # this is gonna be worse -> stop
+        if self.estimate + err < self.record or len(self.samples[1:]) > 20:  # this is gonna be worse -> stop
             log.info("----> stop early")
             return True
         return False

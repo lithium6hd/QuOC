@@ -18,18 +18,60 @@
   "times": [],
   "parameters": [
     {
-        "parameter_name": "CoolerVCO",
-        "lower_limit": 1,
-        "upper_limit": 6,
-        "initial_value": 1.7,
-        "amplitude_variation": 1
+        "parameter_name": "RepVCOComp",
+        "lower_limit": 6,
+        "upper_limit": 8.2,
+        "initial_value": 7.8,
+        "amplitude_variation": 0.5
     },
     {
-        "parameter_name": "RepumpVCO",
+        "parameter_name": "PowRepComp",
+        "lower_limit": 0,
+        "upper_limit": 0.4,
+        "initial_value": 0.04,
+        "amplitude_variation": 0.05
+    },
+    {
+        "parameter_name": "CoolerVCOComp",
+        "lower_limit": 3,
+        "upper_limit": 5,
+        "initial_value": 4.5,
+        "amplitude_variation": 0.2
+    },
+    {
+        "parameter_name": "PowCoolComp",
+        "lower_limit": 0,
+        "upper_limit": 0.4,
+        "initial_value": 0.1,
+        "amplitude_variation": 0.05
+    },
+    {
+        "parameter_name": "x",
+        "lower_limit": 0.1,
+        "upper_limit": 0.6,
+        "initial_value": 0.4,
+        "amplitude_variation": 0.1
+    },
+    {
+        "parameter_name": "y",
+        "lower_limit": 0,
+        "upper_limit": 0.6,
+        "initial_value": 0.23,
+        "amplitude_variation": 0.05
+    },
+    {
+        "parameter_name": "CompTime",
         "lower_limit": 1,
-        "upper_limit": 10,
-        "initial_value": 7.1,
-        "amplitude_variation": 1
+        "upper_limit": 20,
+        "initial_value": 10,
+        "amplitude_variation": 2
+    },
+    {
+        "parameter_name": "CompTimeCoils",
+        "lower_limit": 1,
+        "upper_limit": 20,
+        "initial_value": 10,
+        "amplitude_variation": 2
     }
 ]
 }

@@ -17,6 +17,7 @@ scikit-learn = "^1.5.1"
 scikit-image = "^0.24.0"
 fewfermions = {path = "../08-FewFermions"}
 m-loop = "~3.3.4"
+numpy = "<2"
 
 
 [build-system]

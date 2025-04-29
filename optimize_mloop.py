@@ -63,7 +63,7 @@ class MloopInterface(mli.Interface):
         else:
             cost_function = -self.be.fom.get()
 
-        return {'cost': cost_function, 'uncer': self.be.fom.get_errror(), 'bad': False}
+        return {'cost': cost_function, 'bad': False}  # , 'uncer': self.be.fom.get_errror()
 
 
 class MloopBackendServer(BackendServer):
@@ -124,13 +124,15 @@ from quocslib.utils.inputoutput import readjson
 
 from utils import logger
 from FoM.NormalVariable import NormalVariable
+from FoM.Fluctuations import Fluctuations
 
 if __name__ == "__main__":
     # logger.setup_applevel_logger()
     #fom = Fidelity(2)
-    fom = NormalVariable()
-    interface = MloopInterface(fom, minimize_fom=False)
-    opt_dict = readjson("mloop_compression.json")
+    #fom = NormalVariable()
+    fom = Fluctuations(number_of_samples=50)
+    interface = MloopInterface(fom, minimize_fom=True)
+    opt_dict = readjson("mloop_sai.json")
     optimizer = interface
     interface.be.set_optimizer(optimizer, opt_dict)
     interface.be.listen()

@@ -33,9 +33,10 @@ class Fluctuations(FoM):
         if self.estimate == 0:
             self.estimate = 1e-14  # To avoid division by 0
         if len(self.samples[1:]) > 1:
-            s = stats.sem(self.samples[1:], ddof=1)
-            c = stats.t(len(self.samples[1:]) - 1).ppf(1 / 2 + self.conf / 2)
-            err = c * s
+            #s = stats.sem(self.samples[1:], ddof=1)
+            #c = stats.t(len(self.samples[1:]) - 1).ppf(1 / 2 + self.conf / 2)
+            #err = c * s
+            err = np.std(self.samples[1:])
         else:
             err = np.nan
         self.est_err = err
@@ -44,7 +45,7 @@ class Fluctuations(FoM):
 
         log.info("%i (%.1e) - variable %.2e +/- %.2e (%.1f%%) -> FoM = %.2e" % (len(self.samples[1:]) - 1, target_value, self.estimate,
                                                                   err, abs(err / self.estimate) * 100, self.est_err_by_estimate))
-        if len(self.samples[1:]) > self.number_of_samples:
+        if len(self.samples[1:]) >= self.number_of_samples:
             return True
         # if abs(err / self.estimate) <= self.acc:  # accurate enough -> stop
         #     return True
@@ -63,22 +64,6 @@ class Fluctuations(FoM):
         if self.estimate > self.record:
             self.record = self.estimate  # update record
         return self.record
-
-
-if __name__ == "__main__":
-    logger.setup_applevel_logger()
-    fom = NormalVariable()
-    meas = [30, 55, 67, 41, 81, 65, 38, 50, 52, 54, 52, 52, 52, 52, 52, 52, 52, 52, 52, 100, 100]
-    for m in meas:
-        if fom.update(m):
-            break
-    fom.update_record()
-    fom.reset()
-    meas = [10, 4.5, 6.7, 11.1, 8, 6, 3.8, 5, 4, 7]
-    for m in meas:
-        if fom.update(m):
-            breakimport numpy as np
-import scipy.stats as stats
 
 from utils import logger
 from FoM import FoM
@@ -130,7 +115,7 @@ class NormalVariable(FoM):
         return self.estimate
 
     def get_errror(self) -> float:
-        return self.est_err
+        return 0
 
     def update_record(self) -> float:
         if self.estimate > self.record:
