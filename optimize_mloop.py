@@ -158,14 +158,15 @@ from utils import logger
 from FoM.NormalVariable import NormalVariable
 from FoM.Fluctuations import Fluctuations
 from FoM.PreparationSpeed import SpeedAndAtomNumber
+from FoM.Fidelity import Fidelity
 
 if __name__ == "__main__":
     # logger.setup_applevel_logger()
-    #fom = Fidelity(2)
+    fom = Fidelity(3)
     #fom = NormalVariable()
-    fom = Fluctuations(number_of_samples=50)
+    # fom = Fluctuations(number_of_samples=50)
     interface = MloopInterface(fom, minimize_fom=True)
-    opt_dict = readjson(r'OptimizationConfigurations\mloop_sai.json')
+    opt_dict = readjson(r'OptimizationConfigurations\mloop_spilling_fidelity.json')
     optimizer = interface
     interface.be.set_optimizer(optimizer, opt_dict)
     interface.be.listen()
