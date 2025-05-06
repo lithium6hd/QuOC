@@ -1,0 +1,12 @@
+{
+  "controller_type": "neural_net",
+  "max_num_runs_without_better_params": 100,
+  "cost_has_noise": true,
+  "parameters": {
+    "name": ["uWTweezerInitialPower", "TweezerPowStartRelVODT"],
+    "min_boundary": [             0,              -500,  ],
+    "max_boundary": [            500,               20, ],
+    "first_params": [            350,               -50, ]
+  },
+  "training_type": "random"
+}

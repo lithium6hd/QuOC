@@ -63,7 +63,39 @@ class MloopInterface(mli.Interface):
         else:
             cost_function = -self.be.fom.get()
 
-        return {'cost': cost_function, 'uncer': self.be.fom.get_errror(), 'bad': False}
+        return {'cost': cost_function, 'bad': False}  # , 'uncer': self.be.fom.get_errror()
+
+
+class MloopInterfaceParametersInCost(mli.Interface):
+
+    def __init__(self, fom: FoM, minimize_fom=True):
+        super(MloopInterface, self).__init__()
+        self.be = MloopBackendServer(fom)
+        self.minimize_fom = minimize_fom
+
+    def get_next_cost_dict(self, params_dict):
+        parameters = params_dict['params']
+
+
+        if not self.be.synced:  # does this thread hold the lock already?
+            self.be.sync_lock.acquire()  # it doesn't -> wait for exp cycles to complete
+        self.be.parameters = parameters
+
+        self.be.sync_lock.release()
+        # wait for exp cycle to start
+        while not self.be.sync_lock.locked():
+            pass
+
+        # get lock and compute new pulses
+        self.be.sync_lock.acquire()
+        self.be.synced = True
+
+        if self.minimize_fom:
+            cost_function = self.be.fom.get(parameters)
+        else:
+            cost_function = -self.be.fom.get(parameters)
+
+        return {'cost': cost_function, 'bad': False}  # , 'uncer': self.be.fom.get_errror()
 
 
 class MloopBackendServer(BackendServer):
@@ -124,13 +156,16 @@ from quocslib.utils.inputoutput import readjson
 
 from utils import logger
 from FoM.NormalVariable import NormalVariable
+from FoM.Fluctuations import Fluctuations
+from FoM.PreparationSpeed import SpeedAndAtomNumber
 
 if __name__ == "__main__":
     # logger.setup_applevel_logger()
     #fom = Fidelity(2)
-    fom = NormalVariable()
-    interface = MloopInterface(fom, minimize_fom=False)
-    opt_dict = readjson("mloop_compression.json")
+    #fom = NormalVariable()
+    fom = Fluctuations(number_of_samples=50)
+    interface = MloopInterface(fom, minimize_fom=True)
+    opt_dict = readjson("mloop_sai.json")
     optimizer = interface
     interface.be.set_optimizer(optimizer, opt_dict)
     interface.be.listen()
