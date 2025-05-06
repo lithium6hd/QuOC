@@ -165,7 +165,7 @@ if __name__ == "__main__":
     #fom = NormalVariable()
     fom = Fluctuations(number_of_samples=50)
     interface = MloopInterface(fom, minimize_fom=True)
-    opt_dict = readjson("mloop_sai.json")
+    opt_dict = readjson(r'OptimizationConfigurations\mloop_sai.json')
     optimizer = interface
     interface.be.set_optimizer(optimizer, opt_dict)
     interface.be.listen()

@@ -1,0 +1,12 @@
+{
+  "controller_type": "neural_net",
+  "max_num_runs_without_better_params": 100,
+  "cost_has_noise": true,
+  "parameters": {
+    "name": ["HODTPlainEvapTime", "HODTEvapRampPeriod", "HODTEvapEndPower", "VODTPowStart", "VODTPowStartRampPeriod", "VODTInitialPower"],
+    "min_boundary": [        100,                  100,                  0,            -10,                        0,                  0],
+    "max_boundary": [       2000,                 2000,                  3,           4000,                       100,                1.1],
+    "first_params": [        500,                  500,                0.5,            150,                       10,                1.1]
+  },
+  "training_type": "random"
+}

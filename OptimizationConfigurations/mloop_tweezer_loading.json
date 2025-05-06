@@ -1,0 +1,11 @@
+{
+  "controller_type": "neural_net",
+  "max_num_runs_without_better_params": 100,
+  "cost_has_noise": true,
+  "parameters": {
+    "name": ["CompFreqRampDuration", "CompRepumpFreqEnd", "CompCoolerFreqEnd", "CompRepumpPowerEnd", "CompCoolerPowerEnd" , "CompCoil14Gradient", "CompCoil4Offset", "CompRepumpPowerStart", "CompCoolerPowerStart"],
+    "min_boundary": [             1,                   6,                   3,                    0,                  0.01,                    3,                 0,                   0.01,                   0.01],
+    "max_boundary": [            20,                 8.2,                   5,                  0.1,                   0.1,                    6,                 2,                    0.4,                    1.4],
+    "first_params":
+  "training_type": "random"
+}

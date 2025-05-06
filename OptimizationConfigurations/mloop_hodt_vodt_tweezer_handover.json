@@ -1,0 +1,12 @@
+{
+  "controller_type": "neural_net",
+  "max_num_runs": 5000,
+  "cost_has_noise": true,
+  "parameters": {
+    "name": ["HODTPlainEvapTime", "HODTEvapRampPeriod", "HODTEvapEndPower", "eHODTInitialPower", "eHODTPowStart", "eHODTPlainEvapTime", "eHODTEvapEndPower", "eHODTEvapRampPeriod", "VODTPowStart", "VODTPowStartRampPeriod", "VODTInitialPower", "VODTHoldTime", "VODTEvapRampPeriod", "TweezerPowStart", "uWTweezerInitialPower", "ScanODTTransferCoil23"],
+    "min_boundary": [        150,                   10,                  0,                   0,             -20,                    0,                   0,                     0,            -10,                        0,                  0,              0,                    0,                 0,                      10,                       0],
+    "max_boundary": [       1000,                 2000,                  3,                   3,            1000,                 1000,                   3,                  1000,           2500,                     1000,               0.15,           1000,                 1000,              5000,                    1100,                     650],
+    "first_params": [        500,                   80,                0.4,                   3,             -20,                  450,                   0,                   100,            350,                       97,               0.07,            200,                  200,               700,                     800,                     250]
+  },
+  "training_type": "random"
+}

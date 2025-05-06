@@ -1,0 +1,12 @@
+{
+  "controller_type": "neural_net",
+  "max_num_runs": 1000,
+  "cost_has_noise": true,
+  "parameters": {
+    "name": ["RepVCOImagODT", "PowRepImagODT", "CoolerVCOImagODT", "PowCoolImagODT", "SVODT"],
+    "min_boundary": [      6,           0.001,                  2,            0.001,  100000],
+    "max_boundary": [      8,             0.2,                  8,             0.15,  900000],
+    "first_params": [    7.7,            0.09,                4.4,            0.097,  900000]
+  },
+  "training_type": "random"
+}
